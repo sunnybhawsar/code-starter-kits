@@ -1,22 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BowlingBall.Calculations;
+using BowlingBall.Stores;
 
 namespace BowlingBall
 {
-    public class Game
+    public class Game : IGame
     {
+        private readonly IStore _store;
+        private readonly ScoreCalculator _scoreCalculator;
+
+        public Game(IStore store)
+        {
+            _store = store;
+            _scoreCalculator = ScoreCalculator.Instance(_store);
+        }
+
         public void Roll(int pins)
         {
-            // Add your logic here. Add classes as needed.
+            _store.AddRoll(pins);
         }
 
         public int GetScore()
         {
-            // Returns the final score of the game.
-            return 0;
+            return _scoreCalculator.FinalScore();
+        }
+
+        public void Reset()
+        {
+            _store.Clear();
+            _scoreCalculator.Reset();
         }
     }
 }
